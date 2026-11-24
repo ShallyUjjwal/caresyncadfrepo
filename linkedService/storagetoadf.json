@@ -1,0 +1,10 @@
+{
+	"name": "storagetoadf",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://pocstoargeacc.dfs.core.windows.net/"
+		}
+	}
+}
