@@ -318,7 +318,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"on": {
-						"value": "@activity('read table details').output.firstRow.source_system",
+						"value": "@activity('read table details').output.firstRow.source_path",
 						"type": "Expression"
 					},
 					"cases": [
@@ -341,7 +341,67 @@
 										"source": {
 											"type": "PostgreSqlV2Source",
 											"query": {
-												"value": "@concat(\n    'SELECT * FROM public.',\n    activity('Read Table Details').output.firstRow.source_table_name,\n    if(\n        equals(\n            toUpper(trim(string(activity('Read Table Details').output.firstRow.load_type))),\n            'FULL'\n        ),\n        '',\n        concat(\n            ' WHERE ',\n            activity('Read Table Details').output.firstRow.watermark_column,\n            ' > ',\n            '''',\n            string(variables('watermarkvalue')),\n            ''''\n        )\n    )\n)",
+												"value": "@concat(\n    'SELECT * FROM public.',\n    activity('read table details').output.firstRow.source_table_name,\n    if(\n        equals(\n            toUpper(trim(string(activity('read table details').output.firstRow.load_type))),\n            'FULL'\n        ),\n        '',\n        concat(\n            ' WHERE ',\n            activity('read table details').output.firstRow.watermark_column,\n            ' > ',\n            '''',\n            string(variables('watermarkvalue')),\n            ''''\n        )\n    )\n)",
+												"type": "Expression"
+											},
+											"queryTimeout": "02:00:00"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "PostgreSqlTable1",
+											"type": "DatasetReference"
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "postgresstoparquet",
+											"type": "DatasetReference",
+											"parameters": {
+												"container": "landing",
+												"folder": {
+													"value": "@concat(\n    activity('read table details').output.firstRow.source_system,'/',\n    activity('read table details').output.firstRow.source_table_name,'/',variables('starttime')\n)",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "sourcetolanding_copy1",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 2,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "PostgreSqlV2Source",
+											"query": {
+												"value": "@concat(\n    'SELECT * FROM public.',\n    activity('read table details').output.firstRow.source_table_name,\n    if(\n        equals(\n            toUpper(trim(string(activity('read table details').output.firstRow.load_type))),\n            'FULL'\n        ),\n        '',\n        concat(\n            ' WHERE ',\n            activity('read table details').output.firstRow.watermark_column,\n            ' > ',\n            '''',\n            string(variables('watermarkvalue')),\n            ''''\n        )\n    )\n)",
 												"type": "Expression"
 											},
 											"queryTimeout": "02:00:00"
@@ -432,7 +492,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"folder": {
-													"value": "@activity('read table details').output.firstRow.source_path",
+													"value": "@split(activity('read table details').output.firstRow.source_path,'/')[0]",
 													"type": "Expression"
 												},
 												"container": "source"
