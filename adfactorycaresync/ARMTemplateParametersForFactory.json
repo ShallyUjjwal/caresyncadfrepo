@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfactorycaresync"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "caresyncserve.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "caresyncserve"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "caresyncserve"
+		},
+		"postgresskeyvault_properties_typeProperties_baseUrl": {
+			"value": "https://neondbpassword.vault.azure.net/"
+		},
+		"postgrestoadf_properties_typeProperties_server": {
+			"value": "ep-square-sound-bbk5zfhj-pooler.c-15.us-east-1.aws.neon.tech"
+		},
+		"postgrestoadf_properties_typeProperties_database": {
+			"value": "neondb"
+		},
+		"postgrestoadf_properties_typeProperties_username": {
+			"value": "neondb_owner"
+		},
+		"storagetoadf_properties_typeProperties_url": {
+			"value": "https://pocstoargeacc.dfs.core.windows.net/"
+		},
+		"AzureDatabricks1_properties_typeProperties_existingClusterId": {
+			"value": "1125-063407-ykw2ax7f"
+		}
+	}
+}
