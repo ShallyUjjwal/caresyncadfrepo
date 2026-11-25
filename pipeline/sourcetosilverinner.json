@@ -61,7 +61,7 @@
 				],
 				"policy": {
 					"timeout": "0.12:00:00",
-					"retry": 0,
+					"retry": 2,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -71,7 +71,7 @@
 					"source": {
 						"type": "PostgreSqlV2Source",
 						"query": {
-							"value": "select * from PUBLIC.@{activity('read table details').output.firstRow.source_table_name}\n@{\n    if(equals(activity('read table details').output.firstRow.load_type,'full'),'',\n    concat( 'where ',activity('read table details').output.firstRow.watermark_column,' >','''',variables('watermarkvalue'),''''\n    ))\n}",
+							"value": "@concat(\n    'SELECT * FROM public.',\n    activity('Read Table Details').output.firstRow.source_table_name,\n    if(\n        equals(\n            toUpper(trim(string(activity('Read Table Details').output.firstRow.load_type))),\n            'FULL'\n        ),\n        '',\n        concat(\n            ' WHERE ',\n            activity('Read Table Details').output.firstRow.watermark_column,\n            ' > ',\n            '''',\n            string(variables('watermarkvalue')),\n            ''''\n        )\n    )\n)",
 							"type": "Expression"
 						},
 						"queryTimeout": "02:00:00"
@@ -128,7 +128,7 @@
 				],
 				"policy": {
 					"timeout": "0.12:00:00",
-					"retry": 0,
+					"retry": 2,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -169,7 +169,7 @@
 				],
 				"policy": {
 					"timeout": "0.12:00:00",
-					"retry": 0,
+					"retry": 2,
 					"retryIntervalInSeconds": 30,
 					"secureOutput": false,
 					"secureInput": false
@@ -257,7 +257,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@not(equals(toUpper(activity('read table details').output.firstRow.load_type), 'FULL'))",
+						"value": "@not(equals(toUpper(trim(activity('read table details').output.firstRow.load_type)), 'FULL'))",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -267,7 +267,7 @@
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
-								"retry": 0,
+								"retry": 2,
 								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
@@ -330,7 +330,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@not(equals(activity('read table details').output.firstRow.load_type,'full' ))",
+						"value": "@not(equals(toUpper(trim(activity('read table details').output.firstRow.load_type)), 'FULL'))",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -340,7 +340,7 @@
 							"dependsOn": [],
 							"policy": {
 								"timeout": "0.12:00:00",
-								"retry": 0,
+								"retry": 2,
 								"retryIntervalInSeconds": 30,
 								"secureOutput": false,
 								"secureInput": false
@@ -373,7 +373,8 @@
 				"defaultValue": "1"
 			},
 			"adf_run_id": {
-				"type": "string"
+				"type": "string",
+				"defaultValue": "a5"
 			}
 		},
 		"variables": {
