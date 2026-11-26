@@ -71,7 +71,7 @@
 									{
 										"type": "Query",
 										"text": {
-											"value": "INSERT INTO ctrl.audit_log\n    (adf_run_id, table_id, stage, status, start_time)\nVALUES\n    ('@{pipeline().parameters.adf_run_id}', '@{item().table_id}', 'silvertogold', 'IN_PROGRESS', SYSUTCDATETIME());\n",
+											"value": "INSERT INTO ctrl.audit_log\n    (adf_run_id, table_id, stage, status, start_time)\nVALUES\n    ('@{pipeline().parameters.adf_run_id}', '@{item().table_id}', 'silver_to_gold', 'IN_PROGRESS', SYSUTCDATETIME());\n",
 											"type": "Expression"
 										}
 									}
