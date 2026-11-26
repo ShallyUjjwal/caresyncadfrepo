@@ -115,11 +115,11 @@
 				"typeProperties": {
 					"notebookPath": "/caresyncrepo/databrickscaresync/bronzetosilver",
 					"baseParameters": {
-						"landingtimestamp": {
+						"landing_timestamp": {
 							"value": "@variables('starttime')",
 							"type": "Expression"
 						},
-						"tablename": {
+						"table_name": {
 							"value": "@activity('read table details').output.firstRow.silver_table_name",
 							"type": "Expression"
 						},
@@ -194,7 +194,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@not(equals(toUpper(trim(activity('read table details').output.firstRow.load_type)), 'FULL'))",
+						"value": "@not(equals(\n    toUpper(trim(string(activity('read table details').output.firstRow.load_type))),\n    'FULL'\n))",
 						"type": "Expression"
 					},
 					"ifTrueActivities": [
@@ -318,7 +318,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"on": {
-						"value": "@activity('read table details').output.firstRow.source_path",
+						"value": "@activity('read table details').output.firstRow.source_system",
 						"type": "Expression"
 					},
 					"cases": [
